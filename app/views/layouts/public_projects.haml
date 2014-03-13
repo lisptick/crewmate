@@ -13,7 +13,7 @@
       .top{ :style => 'background-color: rgb(255,255,220); border-bottom: 1px solid rgb(200,200,150); width: 100%; display: block; font-size: 12px; padding: 10px 0; text-align: center' }
         = link_to "Log into Crewmate", login_path
         to post to this project. Don't have an account?
-        = link_to "Sign up for free", signup_path
+        = link_to "Sign up", signup_path
         to start contributing with this projects.
     #container.container
       .wrapper
@@ -33,6 +33,6 @@
           This community is powered by
           = link_to 'Crewmate.', 'http://github.com/crewmate/crewmate'
           - unless current_user
-            = link_to "Sign up for a free account", signup_path
+            = link_to "Sign up", signup_path
             to start contributing with this community.
 
