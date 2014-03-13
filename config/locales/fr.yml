@@ -141,7 +141,7 @@ fr:
       title: "%{user} a créé la page %{page}"
     create_person: 
       by: par
-      create_person: "a rejoint projet"
+      create_person: "a rejoint le projet"
       title: "%{person} a été invité(e) sur le projet %{project}"
     create_project: 
       left: "a créé le projet"
@@ -272,6 +272,8 @@ fr:
       confirm_delete: "Êtes vous sûr de vouloir effacer ce commentaire?"
       convert_task: "Convertir en tâche"
       edit: "Modifier le commentaire"
+    fields:
+      attach: Joindre
     attach: 
       tooltip: Joindre
     comment: 
@@ -1071,11 +1073,15 @@ fr:
       name: Nom
       name_description: "Choisissez un titre bref et explicite"
     index: 
+      title: "Pages dans %{project}"
+      new_page: "Nouvelle Page"
+      cant_create: "Vous n'avez pas l'autorisation de créer des pages dans ce projet"
       pages_in_this_project: "Pages dans ce projet"
       rss: 
         description: "Pages du projet %{name}"
         title: "%{name} pages"
     new: 
+      title: "Nouvelle Page"
       define1_html: "Vous pouvez ici <b>partager des infomations utiles</b> avec votre équipe: « plan, liens intéressants, instructions, modèles de mails… »"
       define2_html: "Modifier une page est un page est simple et facile, glisser-déplacer les éléments sur place."
       define2_html: "Modifier une page est un page est simple et facile, modifier et glisser-déplacer les éléments sur place."
@@ -1162,8 +1168,14 @@ fr:
       name: Nom
       new: 
         time_tracking_docs: "En savoir plus."
+        choose_organization:
+          new_org_name_html: "Nom de l'organisation <em>Vous pourrez ajouter d'autres projets à cette même organisation plus tard</em>"
+          choose_org_html: "Organisation <em>A quelle organisation ce projet appartient-il?</em>"
+          or_create_a_new_org_html: "ou créer une <a href='%{link}'>nouvelle organisation</a>"
       owner: Propriétaire
       owner_description: "Le propriétaire du projet est la seule personne qui peut modifier les paramètres de ce projet. Une fois que vous aurez transférer le projet à quelqu’un d’autre, vous ne serez plus autorisé à modifier certain paramètres du projet."
+      name_html: "Nom du projet <em>Choisissez un nom court et descriptif, par exemple: Taggart Transcontinental.</em>"
+      name_example: Nom du projet
       permalink_html: Lien permanant
       permalink_description: "Ceci sera l’adresse internet de votre projet. Choisissez une adresse concise et sans espace."
       public_project_html: "Projet public. <em>Tout le monde peut accéder et rejoindre le project depuis la <a href='/public'>section des projets publics</a>.</em>"
@@ -1171,6 +1183,8 @@ fr:
         upgrade_html: "Pour sauvegarder ce projet et pouvoir le modifier, vous devez <a href='%{link}'>vous abonnez à un plan suppérieur</a> pour obtenir plus de stockage et de fonctionalité, ou archiver d'autre projets."
         you_cant_unarchive: "Vous avez %{active} projets actifs, et votre plan actuel permet seulement %{max} projets"
       tracks_time_html: "Activer le suivi du temps"
+      extra_options: "Plus d'options"
+      organization: Organisation
     index: 
       archived: "Montrer %{count} projets archivés…"
       new_project: "Nouveau projet"
@@ -1193,6 +1207,8 @@ fr:
       not_allowed: "Vous ne pouvez pas à créer des projets avec votre compte actuel."
       submit: "Créer un projet et commencer à inviter des utilisateurs"
       title: "Créer un projet"
+      explain1_html: "Un projet est un groupe partagé par des membres. Utlisez le pour poster des Conversations, Tâches et Fichiers."
+      explain2_html: "Vous pouvez créer un projet pour chaque domaine: Developpement, Ventes, les projets de vos clients, etc."
       upgrade: 
         to_2_html: "<a href='%{link}'>Abonnez vous maintenant</a> pour créer <b>plus de %{projects} projets<b>, stocker <b>%{storage} Gb<b> de fichiers et utilisez la <b>barre de recherches à travers tous vos projets<b>."
       you_can_create_more: 
@@ -1213,11 +1229,11 @@ fr:
       limited: "Dans un compte gratuit, vous pouvez stoquer seulement 50 Mb de fichiers par projet."
       upgrade: "Obtenez un compte premium maintenant!"
     people_list: 
-      invite_people: "Invitez contact"
+      invite_people: "Invitez un contact"
       pending_invitations: 
         one: "une invitation en attente"
         other: "%{count} d'invitations en attente"
-      people_in_project: "Personne dans ce projet"
+      people_in_project: "Personnes dans ce projet"
     primer: 
       create_first: "Créez votre premier projet!"
       define1_html: "<b>Collaborez</b> avec votre équipe pour tous vos projets: « un site web, organisation d’une soirée, travail pour des clients… »"
@@ -1234,7 +1250,11 @@ fr:
       new: "+ Nouvelle conversation"
       title: "Conversations récentes"
       view_all: "Voir toutes les conversations"
+    pages:
+      title: Pages
+      new: "+ Nouvelle page"
     show: 
+      title: "Activité récente sur %{project}"
       new_task_list_link: "Nouvelle liste de tâches"
       rss: 
         description: "Actualités récentes dans le projet %{name}"
@@ -1242,6 +1262,7 @@ fr:
       subscribe: "Souscrivez à ce projet"
       text_styling: "Style du texte"
       tip: "Si vous mentionnez le @nom d’utilisateur de quelqu’un, celui‑ci recevra un mail avec votre message"
+      public_project: "Site public de ce projet"
       update_your_status: "Que faites‑vous actuellement?"
   reset_passwords: 
     create: 
@@ -1267,7 +1288,7 @@ fr:
       search_again: "Cherchez à nouveau"
       title: Recherche dans tous les projets"
       title_in_project: "Recherche dans le projet: %{project}"
-    placeholder: "Recherchez tous les projets"
+    placeholder: "Recherchez dans les projets"
     placeholder_in_project: "Recherchez dans le projet"
     submit: Cherchez
   sessions: 
@@ -1282,6 +1303,8 @@ fr:
       title: Entrer
       video: Teambox
   shared: 
+    collapsed_mode: "Cacher le contenu des discussions"
+    expanded_mode:  "Afficher le contenu des discussions"
     archived_projects: 
       archived_projects: "Projets Archivés"
     footer: 
@@ -1296,6 +1319,7 @@ fr:
       logout: Quitter
       project_invitations: "Invitations (%{count})"
       settings: Options
+      help: Aide
     instructions: 
       send_email: "Envoyez un nouveau commentaire par courriel..."
       send_email_conversations: "Envoyez une nouvelle conversation par courriel..."
@@ -1306,8 +1330,24 @@ fr:
       subscribe_to_calendars: "S'abonner aux calendriers..."
       subscribe_to_feeds: "S'abonner aux flux..."
     navigation: 
+      recent_activity: "Activité récente"
       all_projects: Projets
-      new_project: +
+      show_all_projects: Tous les projets...
+      new_project: + Nouveau Projet
+      conversations: Conversations
+      tasks: Tâches
+      files: Fichiers
+      settings: Paramètres
+      people: "Membres & Permissions"
+      my_tasks: "Mes Tâches"
+      open_my_tasks: "Toutes mes tâches"
+      show_all_tasks: "Voir toutes mes tâches..."
+      organizations: Organisations
+      show_all_organizations: "Gérer les organizations..."
+      gantt_and_calendars: Gantts et calendriers
+      show_more: Plus
+      show_less: Moins
+      all_projects: Projets
       welcome: Bienvenue
     project_navigation: 
       all_conversations: "Mes conversations"
@@ -1326,9 +1366,10 @@ fr:
       task_lists: Tâches
       time_tracking: "Time Tracking"
     project_settings_navigation: 
+      general: "Patamètres Généraux"
       deletion: "Archivage/Suppression de projet"
       general: "Paramètres généraux"
-      ownership: Ownership
+      ownership: Propriété
       picture: "Image du projet"
     projects: 
       projects: Projets
@@ -1346,14 +1387,14 @@ fr:
     task_navigation: 
       all_tasks: Toutes
       everybodys_tasks: "Tâches de tout le monde"
-      hide_archived_tasks: "Ne plus montrer archivées"
+      hide_archived_tasks: "Ne plus montrer les tâches archivées"
       my_assigned_tasks: "Uniquement les tâches qui me sont assignées"
       my_tasks: 
         one: "Ma tâche"
         other: "Mes tâches (%{count})"
       unarchived_tasks: "Tâches réactivés"
     upcoming_events_primer: 
-      title: "Il n’y a pas de tâches due à afficher sur le calendrier"
+      title: "Il n’y a pas de tâches dues à afficher sur le calendrier"
     upgrade_browser: 
       chrome: "Chrome,"
       firefox: Firefox
@@ -1364,15 +1405,15 @@ fr:
     user_navigation: 
       account_settings: "Compte et préférences"
       delete_account: "Supprimer le compte..."
-      linked_accounts: "Comptes reliés"
+      linked_accounts: "Comptes liés"
       notifications: Notifications
       plans_and_billing: "Plans et facturation"
       profile_information: "Information de contact"
       profile_picture: Image
     watchers: 
       nobody_watching: "Personne ne suit les changements de cet élément"
-      people_watching: "Qui suivent cet élément: "
-      started_watching: "Vous recevrez maintenant des notifications par courriel pour activités à ce sujet."
+      people_watching: "Qui suit cet élément: "
+      started_watching: "Vous recevrez maintenant des notifications par courriel pour les activités à ce sujet."
       stopped_watching: "Vous ne recevrez plus de notifications à ce sujet."
       unwatch: "Arrêter de suivre"
       watch: Suivre
@@ -1386,10 +1427,10 @@ fr:
   task_lists: 
     actions: 
       archive: "Archiver cette liste de tâches"
-      confirm_resolve_and_archive: "Êtes‑vous certain(e)s de vouloir résoudre et archiver cette list de tâches?"
+      confirm_resolve_and_archive: "Êtes‑vous certain(e)s de vouloir résoudre et archiver cette liste de tâches?"
       rename: "Renommer cette liste de tâches"
       resolve_and_archive: "Résoudre toutes les tâches puis archiver "
-      set_dates: "Définir les dates de début et fin"
+      set_dates: "Définir les dates de début et de fin"
       show_archived: 
         one: "Montrer 1 tâche archivée"
         other: "Montrer %{count} tâches archivées"
@@ -1417,7 +1458,7 @@ fr:
       name: "Nom de la Liste de Taches"
       optional: "Si vous indiquez des dates de début et de fin, cette tâche apparaîtra dans le Gantt"
       start_on: "Débute le… <i>facultatif</i>"
-      task_list: "Une liste de tâches définit une étape importante pour votre projet. L’intérieur d’une liste de tâches, vous pouvez créer des tâches et les assigner à des personnes."
+      task_list: "Une liste de tâches définit une étape importante pour votre projet. A l’intérieur d’une liste de tâches, vous pouvez créer des tâches et les assigner à des personnes."
       title: "Nouvelle tâche"
     filter: 
       anybody: "N'importe qui"
@@ -1431,11 +1472,11 @@ fr:
       tomorrow: Demain
       unassigned: "Tâches non assignées"
     gantt_view: 
-      back_to_normal_view: "Retournez à en vue normale"
-      view_for_all_projects: "Voir calendrier et diagramme de Gantt pour le projet"
+      back_to_normal_view: "Retournez à la vue normale"
+      view_for_all_projects: "Voir le calendrier et le diagramme de Gantt pour le projet"
     index: 
       add_link: "Nouvelle liste de tâches"
-      empty: "Aucune tâche dans cette catégorie !"
+      empty: "Aucune tâche dans cette catégorie!"
       ends_on: "Se termine le %{date}"
       gantt_view: "Projet de Gantt et calendrier"
       no_dates_assigned: "Aucune date définie"
@@ -1445,6 +1486,7 @@ fr:
         title: "Tâches de %{name}"
       starts_on: "Débute le %{date}"
       tasks_for_all_projects: "Tâches pour tous vos projets"
+      tasks_for_all_projects_explain: "Pour gérer et reordonner les listes de tâches, ouvrez les tâches de chaque projet."
       tasks_for_project: "Taches pour ce projet"
     link: 
       edit: Modifier
@@ -1458,7 +1500,7 @@ fr:
     primer: 
       create_first: "Créez la première liste de tâches!"
       define_html: "Utilisez les tâches pour <b>planifier</b>, <b>voir ce qui a été fait</b> et <b>ne pas oublier des idées pour le futur</b>.<br/><i>Quoi ? Qui ? Quand ?</i> Les tâches peuvent avoir un statut, un responsable et une échéance."
-      empty: "Ce projet ne contient pour l’instant aucune conversation."
+      empty: "Ce projet ne contient aucune conversation pour l'instant."
       footer1_html: "C’est une façon simple et habile de <b>faire les choses</b> et de le garder les autres informé."
       footer2_html: "Il est maintenant temps d’oublier les plannifications sur Excel et les diagrammes de Gantt trop complexes!"
       item1_html: "<b>Planifiez</b>. Créez des tâches à l’intérieur de chaque liste et assignez‑les à vos aux membre du project."
@@ -1747,3 +1789,12 @@ fr:
     error: "trop court"
     strong: fort
     weak: faible
+  google_docs:
+    authorization_required: "Pour utiliser Google Docs, vous devez autoriser Teambox à utiliser votre compte Google"
+    authorize_link: "Autoriser Google Docs"
+    create_new: "Créer un nouveau document"
+    create: Créer
+    creating: "En cours..."
+    attach: "Attacher un document Google"
+    search_placeholder: "Chercher des documents Google"
+    new_document_placeholder: "Nouveau titre"
