@@ -37,6 +37,21 @@ defaults: &defaults
   # Email confirmaiton is require to login
   email_confirmation_require: true
 
+  # Which activity types should be displayed?
+  activity_types:
+    - create_conversation
+    - create_task_list
+    - create_task
+    - create_page
+    - edit_page
+    - create_note
+    - edit_note
+    - create_upload
+    - create_person
+    - delete_person
+    - create_project
+    - create_teambox_data
+
   # How many activities should activity feeds display?
   activities_per_page: 25
   autorefresh_interval: 60 # in seconds

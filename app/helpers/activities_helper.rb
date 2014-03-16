@@ -25,7 +25,7 @@ module ActivitiesHelper
   end
 
   # TODO for activities create_note, create_divider, edit and delete
-  ActivityTypes = %w( create_comment
+  ActivityTypes = Teambox.config.activity_types? ? Teambox.config.activity_types :  %w( create_comment
                       create_conversation
                       create_task_list
                       create_task
