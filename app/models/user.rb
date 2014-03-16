@@ -202,6 +202,10 @@ class User < ActiveRecord::Base
     projects.unarchived.count
   end
 
+  def can_create_organization?
+    supervisor? or Teambox.config.user_can_create_organization
+  end
+
   def can_create_project?
     # is in any organization?
     !organizations.empty? or supervisor? or Teambox.config.user_can_create_organization
