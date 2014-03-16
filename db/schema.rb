@@ -227,7 +227,7 @@ ActiveRecord::Schema.define(:version => 20140209164838) do
     t.string   "name"
     t.string   "permalink",                               :null => false
     t.string   "language",          :default => "en"
-    t.string   "time_zone",         :default => "Prague"
+    t.string   "time_zone",         :default => "Paris"
     t.string   "domain"
     t.text     "description"
     t.string   "logo_file_name"
