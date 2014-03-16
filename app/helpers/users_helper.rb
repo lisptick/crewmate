@@ -121,7 +121,7 @@ module UsersHelper
     })
 
     document.on('change', '#user_login', function(e,input) {
-      if(!input.value.match(/^[a-z0-9_]+$/i)) {
+      if(!input.value.match(/^[-a-z0-9\._]+$/i)) {
         FieldErrors.add(input, FieldMessages.invalid)
       } else if (input.value.length > 40) {
         FieldErrors.add(input, FieldMessages.too_long.gsub('%{count}',40))

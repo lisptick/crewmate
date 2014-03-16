@@ -103,7 +103,7 @@ Teambox::Application.routes.draw do
       end
     end
 
-    resources :users do
+    resources :users, :id => /[a-zA-Z0-9\._]+/ do
       resources :invitations
       member do
         get :confirm_email

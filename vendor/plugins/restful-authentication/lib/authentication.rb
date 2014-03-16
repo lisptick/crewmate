@@ -3,8 +3,8 @@ module Authentication
     :name_regex, :bad_name_message,
     :email_name_regex, :domain_head_regex, :domain_tld_regex, :email_regex, :bad_email_message
 
-  self.login_regex       = /\A[a-z0-9_]+\z/
-  # self.login_regex       = /\A\w[\w\.\-_]+\z/                     # ASCII, strict
+  # self.login_regex       = /\A[a-z0-9_]+\z/
+  self.login_regex       = /\A\w[\w\.\-_]+\z/                     # ASCII, strict
   # self.login_regex       = /\A[[:alnum:]][[:alnum:]\.\-_@]+\z/     # Unicode, strict
   # self.login_regex       = /\A[^[:cntrl:]\\<>\/&]*\z/              # Unicode, permissive
 
