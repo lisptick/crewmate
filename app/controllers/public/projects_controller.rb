@@ -2,7 +2,7 @@
 class Public::ProjectsController < Public::PublicController
 
   def index
-    @public_projects = Project.find_all_by_public(true, :order => 'updated_at DESC') - @projects
+    @public_projects = Project.find_all_by_public(true, :order => 'name') - @projects
   end
 
   def show
