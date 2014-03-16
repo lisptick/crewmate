@@ -12,4 +12,5 @@ $stderr.sync = true
 
 require File.dirname(__FILE__) + '/../config/environment'
 
-Emailer.receive(STDIN.read)
+resp = STDIN.read.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "").force_encoding('UTF-8')
+Emailer.receive(resp)
