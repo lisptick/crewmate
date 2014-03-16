@@ -116,12 +116,6 @@
     font-weight: normal
     margin: 0px
       bottom: 5px
-  .note
-    h3
-      border: none
-      margin:
-        top: 10px
-        bottom: 10px
   p
     font-size: 12px
     line-height: 1.4em
@@ -274,6 +268,12 @@ form.new_note, form.edit_note
 
 .note
   padding-left: 16px
+  h1, h2, h3, h4, h5, h6
+    margin-bottom: 10px
+    padding-bottom: 9px
+  h3
+    margin-top: 10px
+    border-bottom: 1px solid #eee
   p.actions
     float: right
     margin: 0px
@@ -286,6 +286,20 @@ form.new_note, form.edit_note
   a.cancel
     float: right
     font-size: 12px
+
+.textilized
+  line-height: 20px
+  ol li, ul li
+    list-style: decimal
+    list-style: disc
+    display: list-item
+    margin:
+      left: 30px
+  .item-list
+    li
+      margin: 0px
+      padding: 0px
+      list-style: none
 
 .show_pages
   .upload
