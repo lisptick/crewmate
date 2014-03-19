@@ -7,6 +7,7 @@
     %title= @title || h(@project).presence || "Teambox public projects"
     = include_stylesheets :application
     = include_stylesheets :public
+    = include_stylesheets :print, :media => :print
 
   %body{ :class => "#{location_name} #{I18n.locale} #{Rails.env}"}
     - unless current_user
