@@ -10,7 +10,8 @@
   - when 'index_task_lists'
 
 %h2= t('.other_views')
-= gantt_view_link(@current_project)
-= instructions_for_calendars
+= gantt_view_link(project)
+= subscribe_to_task_calendar_link(project)
+= subscribe_to_my_task_calendar_link(project)
 = print_task_lists_link(project)
 = instructions_for_email(project)

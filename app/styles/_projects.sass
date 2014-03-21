@@ -55,13 +55,21 @@
           span.login
             float: none
 
-  .recent_conversations, .project_pages
+  .recent_conversations, .project_pages, .project_files, .project_task_lists
     a.conversation
       background: url(/images/comment.gif) no-repeat left
       margin-left: 10px
       padding-left: 25px
     a.page
       background: url(/images/page.png) no-repeat left
+      margin-left: 10px
+      padding-left: 25px
+    a.file
+      background: url(/famfamfam/folder.png) no-repeat left
+      margin-left: 10px
+      padding-left: 25px
+    a.task_list
+      background: url(/images/task_list.png) no-repeat left
       margin-left: 10px
       padding-left: 25px
     a
@@ -346,7 +354,6 @@ body.list_projects
     &.none
       color: #999
     a
-      color: #333
       &.show_archived
         color: #999
         text-decoration: underline
@@ -355,5 +362,4 @@ body.list_projects
       font-size: 12px
       float: right
       a
-        color: #777
         text-decoration: underline

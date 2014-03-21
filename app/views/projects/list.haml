@@ -1,3 +1,12 @@
+.text_actions
+  - if !Teambox.config.community || (Teambox.config.community && !@community_organization) || (@community_organization && @community_role)
+    = new_project_link
+    .clear
+  - else
+    %p= t('.cant_create')
+
+%h2= "Project List"
+
 - @organizations.each do |organization|
 
   - next unless organization[:active_projects].any? or organization[:archived_projects].any?
@@ -26,3 +35,6 @@
           = link_to "#{t('.archived')}: #{h(project)}", project
           %span.status
             = t('.archived_at', :date => project.updated_at.to_date)
+- content_for :column do
+  = instructions_for_feeds
+  = instructions_for_calendars

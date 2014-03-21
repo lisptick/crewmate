@@ -1,0 +1,6 @@
+- content_for :column do
+  = render 'projects/pages', :project => project, :pages => project.pages
+  = render 'projects/uploads', :project => project, :uploads => project.uploads
+  = render 'projects/task_lists', :project => project, :task_lists => project.task_lists
+  = render 'projects/recent_conversations', :project => project, :recent_conversations => project.conversations.not_simple.recent(4)
+  = render 'projects/people_list', :project => project, :compact => false

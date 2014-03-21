@@ -41,8 +41,11 @@ module ApplicationHelper
         :recent_projects => recent_projects
   end
 
-  def search_bar
-    render 'shared/search_bar'
+  def search_bar(project=nil)
+    if (@current_user and @current_user.can_search?) or (project and project.user.can_search?)
+      render 'shared/search_bar',
+        :project => project
+    end
   end
 
   def header

@@ -1,0 +1,12 @@
+.nav_links
+  %h3= link_to @current_project, @current_project, :class => 'project'
+  - if can?(:update, @current_project)
+    .el= link_to t('shared.navigation.settings'), project_settings_path(@current_project.permalink), :class => 'settings'
+    .el= link_to t('shared.navigation.people'), project_people_path(@current_project.permalink), :class => 'people'
+  - if @current_project.owner?(@current_user)
+    .el= link_to t('shared.project_settings_navigation.ownership'), project_ownership_path(@current_project.permalink, :sub_action => 'ownership'), :class => 'ownership'
+    .el= link_to t('shared.project_settings_navigation.deletion'), project_deletion_path(@current_project.permalink, :sub_action => 'deletion'), :class => 'deletion'
+    .el= link_to t('projects.show.public_project'), public_project_path(project), :class => :public if project.public
+  .el= leave_project_link(@current_project)
+  = search_bar(@current_project)
+.clear

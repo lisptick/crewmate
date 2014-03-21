@@ -13,22 +13,13 @@
       = render 'comments/fields', :f => fields,
         :placeholder => t('comments.new.project'), :project => @current_project
   
+.text_actions
+  .el= link_to t('shared.collapsed_mode'), "#", :class => 'collapsed_mode'
+  .el{ :style => 'display: none' }= link_to t('shared.expanded_mode'), "#", :class => 'expanded_mode'
+.clear
+
 #activities
   = list_threads(@threads)
   = show_more_button
 
 =# javascript_tag autorefresh(@activities, @current_project)
-
-- content_for :column do
-  = render 'recent_conversations', :project => @current_project, :recent_conversations => @recent_conversations
-  = render 'pages', :project => @current_project, :pages => @current_project.pages
-
-  = render 'people_list', :project => @current_project, :compact => false
-  - if @current_project.users.size > 1
-    .tip= t('.tip')
-
-  = instructions_for_feeds
-  = instructions_for_calendars
-  = instructions_for_email(@current_project)
-  = link_to t('.public_project'), public_project_path(@current_project), :class => :public_link if @current_project.public
-  = leave_project_link(@current_project) if @current_project.has_member?(@current_user)

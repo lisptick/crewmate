@@ -7,7 +7,7 @@ extractParts = function(responseText) {
   var response = {
     body_classes: extractor.down(".body_classes").innerHTML,
     content: extractor.down(".content_part"),
-    column: extractor.down(".column_part")
+    column: extractor.down(".column_part .left_column_part")
   }
   return response
 }

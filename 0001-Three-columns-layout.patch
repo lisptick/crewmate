@@ -1,0 +1,562 @@
+From 8f70d52c8f67932712697a9fee0dbef469db1ad0 Mon Sep 17 00:00:00 2001
+From: lisptick <lisptick@gmail.com>
+Date: Thu, 20 Mar 2014 23:25:58 +0100
+Subject: [PATCH] Three columns layout
+
+---
+ app/helpers/application_helper.rb              |  7 ++--
+ app/helpers/pages_helper.rb                    |  6 ++++
+ app/helpers/projects_helper.rb                 | 18 +++++++----
+ app/javascripts/navigation_ajax.js             |  2 +-
+ app/styles/_layout.sass                        | 19 +++++++++--
+ app/styles/_projects.sass                      | 12 +++++--
+ app/styles/_sidebar.sass                       | 26 +++++++++++++--
+ app/views/conversations/_column.haml           |  5 ++-
+ app/views/layouts/application.haml             |  9 +++++-
+ app/views/layouts/parts.haml                   |  1 +
+ app/views/projects/_column.haml                |  6 ++++
+ app/views/projects/_pages.haml                 |  1 +
+ app/views/projects/_task_lists.haml            |  8 +++++
+ app/views/projects/_uploads.haml               |  8 +++++
+ app/views/projects/index.haml                  |  2 --
+ app/views/projects/list.haml                   | 12 +++++++
+ app/views/projects/show.haml                   | 19 +++--------
+ app/views/shared/_navigation.html.haml         | 44 +++++---------------------
+ app/views/shared/_project_navigation.html.haml | 12 +++++++
+ app/views/shared/_search_bar.haml              |  2 +-
+ app/views/task_lists/_column.haml              |  5 +--
+ app/views/users/calendars.haml                 |  4 +--
+ 22 files changed, 152 insertions(+), 76 deletions(-)
+ create mode 100644 app/views/projects/_column.haml
+ create mode 100644 app/views/projects/_task_lists.haml
+ create mode 100644 app/views/projects/_uploads.haml
+ create mode 100644 app/views/shared/_project_navigation.html.haml
+
+diff --git a/app/helpers/application_helper.rb b/app/helpers/application_helper.rb
+index 4ae8a87..80d43fb 100644
+--- a/app/helpers/application_helper.rb
++++ b/app/helpers/application_helper.rb
+@@ -41,8 +41,11 @@ module ApplicationHelper
+         :recent_projects => recent_projects
+   end
+ 
+-  def search_bar
+-    render 'shared/search_bar'
++  def search_bar(project=nil)
++    if (@current_user and @current_user.can_search?) or (project and project.user.can_search?)
++      render 'shared/search_bar',
++        :project => project
++    end
+   end
+ 
+   def header
+diff --git a/app/helpers/pages_helper.rb b/app/helpers/pages_helper.rb
+index 4c2a60e..bbeba84 100644
+--- a/app/helpers/pages_helper.rb
++++ b/app/helpers/pages_helper.rb
+@@ -18,6 +18,12 @@ module PagesHelper
+     end
+   end
+ 
++  def new_project_link()
++    if can? :make_projects
++      link_to content_tag(:span,t('.new_project')), new_project_path, :class => 'add_button'
++    end
++  end
++
+   def page_fields(f)
+     render 'pages/fields', :f => f
+   end
+diff --git a/app/helpers/projects_helper.rb b/app/helpers/projects_helper.rb
+index 7d4a4eb..21b02cd 100644
+--- a/app/helpers/projects_helper.rb
++++ b/app/helpers/projects_helper.rb
+@@ -89,28 +89,32 @@ module ProjectsHelper
+   end
+ 
+   def subscribe_to_all_calendars_link
+-    content_tag(:div,
+       (t('.subscribe_to_all') +
+       link_to(t('shared.task_navigation.all_tasks'), user_rss_token(projects_path(:format => :ics))) +
+       ' ' + t('common.or') + ' ' +
+-      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(projects_path(:format => :ics), 'mine'))).html_safe,
+-      :class => 'calendar_links_all')
++      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(projects_path(:format => :ics), 'mine'))).html_safe
+   end
+ 
+   def subscribe_to_calendar_link(project)
+-    content_tag(:div,
+       (t('.subscribe_to_project', :project => h(project)) +
+       link_to(t('shared.task_navigation.all_tasks'), user_rss_token(project_path(project, :format => :ics))) +
+       ' ' + t('common.or') + ' ' +
+-      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(project_path(project, :format => :ics), 'mine'))).html_safe,
+-      :class => :calendar_links)
++      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(project_path(project, :format => :ics), 'mine'))).html_safe
++  end
++
++  def subscribe_to_task_calendar_link(project)
++    link_to(t('shared.task_navigation.all_tasks'),  user_rss_token(project_path(project, :format => :ics)), :class => :calendars_link, :style => 'display:block').html_safe
++  end
++
++  def subscribe_to_my_task_calendar_link(project)
++    link_to(t('shared.task_navigation.my_assigned__tasks'),  user_rss_token(project_path(project, :format => :ics)), :class => :calendars_link, :style => 'display:block').html_safe
+   end
+ 
+   def leave_project_link(project)
+     unless project.user == current_user
+       link_to t('people.column.leave_project'),
+         project_person_path(project, current_user.people.detect { |p| p.project_id == project.id }),
+-        :method => :delete, :confirm => t('people.column.confirm_delete'), :class => :leave_link
++        :method => :delete, :confirm => t('people.column.confirm_delete'), :class => :leave
+     end
+   end
+ 
+diff --git a/app/javascripts/navigation_ajax.js b/app/javascripts/navigation_ajax.js
+index 853fab3..3615adb 100644
+--- a/app/javascripts/navigation_ajax.js
++++ b/app/javascripts/navigation_ajax.js
+@@ -7,7 +7,7 @@ extractParts = function(responseText) {
+   var response = {
+     body_classes: extractor.down(".body_classes").innerHTML,
+     content: extractor.down(".content_part"),
+-    column: extractor.down(".column_part")
++    column: extractor.down(".column_part .left_column_part")
+   }
+   return response
+ }
+diff --git a/app/styles/_layout.sass b/app/styles/_layout.sass
+index 15e03f2..e4199e9 100644
+--- a/app/styles/_layout.sass
++++ b/app/styles/_layout.sass
+@@ -10,13 +10,28 @@ body.index_projects, body.show_projects, body.show_users
+ div.wrapper
+   clear: both
+   background: white
++  min-height: 400px
+   +clearing
+ 
+ div.content_wrap
+   float: left
+-  width: 640px
++  width: 650px
+   padding: 10px
+     right: 0px
++div.left_column_wrap
++  float: left
++  width: 270px
++  font-size: 12px
++  div.column
++    background: rgb(255, 255, 255)
++    padding: 10px
++      left: 0
++    border:
++      right: 1px solid #eee
++    select
++      max-width: 280px
++    .view_sidebar
++      margin-left: 15px
+ div.column_wrap
+   float: right
+   width: 300px
+@@ -33,7 +48,7 @@ div.column_wrap
+       margin-left: 15px
+ 
+ div.container
+-  width: 960px
++  width: 1260px
+   margin: 0px auto
+ 
+ // TODO: remove extra element and use +clearing
+diff --git a/app/styles/_projects.sass b/app/styles/_projects.sass
+index 0e936a7..d326168 100644
+--- a/app/styles/_projects.sass
++++ b/app/styles/_projects.sass
+@@ -55,7 +55,7 @@
+           span.login
+             float: none
+ 
+-  .recent_conversations, .project_pages
++  .recent_conversations, .project_pages, .project_files, .project_task_lists
+     a.conversation
+       background: url(/images/comment.gif) no-repeat left
+       margin-left: 10px
+@@ -64,6 +64,14 @@
+       background: url(/images/page.png) no-repeat left
+       margin-left: 10px
+       padding-left: 25px
++    a.file
++      background: url(/famfamfam/folder.png) no-repeat left
++      margin-left: 10px
++      padding-left: 25px
++    a.task_list
++      background: url(/images/task_list.png) no-repeat left
++      margin-left: 10px
++      padding-left: 25px
+     a
+       display: block
+       margin-top: 5px
+@@ -346,7 +354,6 @@ body.list_projects
+     &.none
+       color: #999
+     a
+-      color: #333
+       &.show_archived
+         color: #999
+         text-decoration: underline
+@@ -355,5 +362,4 @@ body.list_projects
+       font-size: 12px
+       float: right
+       a
+-        color: #777
+         text-decoration: underline
+diff --git a/app/styles/_sidebar.sass b/app/styles/_sidebar.sass
+index 96629ac..66d1f42 100644
+--- a/app/styles/_sidebar.sass
++++ b/app/styles/_sidebar.sass
+@@ -1,3 +1,16 @@
++.left_column_wrap
++  .nav_links, .more_links
++    .contained
++      .el
++        width: 250px
++        font-size: 11px
++        a
++          padding-left: 30px
++      .contained
++        .el
++          width: 154px
++          padding-left: 36px
++
+ .nav_links, .more_links
+   padding: 0
+   margin: 0
+@@ -5,7 +18,7 @@
+ 
+   .el
+     display: inline-block
+-    width: 300px
++    width: 200px
+     padding-left: 10px
+     position: relative
+     span
+@@ -44,6 +57,7 @@
+         width: 254px
+         padding-left: 56px
+ 
++
+   .space
+     height: 20px
+ 
+@@ -95,7 +109,15 @@
+     &.collapsed_mode, &.expanded_mode
+       background-image: url(/famfamfam/layers.png)
+     &.loading
+-      background-image: url(/images/loading.gif)
++      background-image: url(/famfamfam/loading.gif)
++    &.public
++      background-image: url(/famfamfam/world.png)
++    &.leave
++      background-image: url(/famfamfam/door_out.png)
++    &.ownership
++      background-image: url(/famfamfam/user_go.png)
++    &.deletion
++      background-image: url(/famfamfam/cross.png)
+     &.show_more, &.show_less
+       font-size: 10px
+       color: #777
+diff --git a/app/views/conversations/_column.haml b/app/views/conversations/_column.haml
+index b193377..cd65a71 100644
+--- a/app/views/conversations/_column.haml
++++ b/app/views/conversations/_column.haml
+@@ -1,3 +1,6 @@
+ - content_for :column do
+   .conversations
+-    = render conversations, :project => project, :current_target => conversation
+\ No newline at end of file
++    %h2
++      = t('shared.project_navigation.all_conversations')
++
++    = render conversations, :project => project, :current_target => conversation
+diff --git a/app/views/layouts/application.haml b/app/views/layouts/application.haml
+index 6dc4889..1a537c8 100644
+--- a/app/views/layouts/application.haml
++++ b/app/views/layouts/application.haml
+@@ -28,13 +28,20 @@
+     #container.container
+       .wrapper
+         - show_flash
++        .left_column_wrap
++          .column#column
++            = render 'shared/navigation'
+         .content_wrap
+           .content#content= yield
+         .column_wrap
+           .column#column
+-            = render 'shared/navigation'
++            -if @current_project
++              = render '/shared/project_navigation', :project => @current_project, :current_user => @current_user, :recent_conversations => @recent_conversations
+             .view_sidebar
++              - if @current_project
++                = render 'projects/column', :project => @current_project, :current_user => @current_user, :recent_conversations => @recent_conversations
+               = yield :column
++
+       = footer
+     = autocomplete_projects_people_data
+     = projects_people_data
+diff --git a/app/views/layouts/parts.haml b/app/views/layouts/parts.haml
+index 271a35f..538eb8b 100644
+--- a/app/views/layouts/parts.haml
++++ b/app/views/layouts/parts.haml
+@@ -1,3 +1,4 @@
+ .body_classes== #{location_name} #{I18n.locale} #{Rails.env} controller_#{controller.controller_name}
+ .content_part= yield
+ .column_part= yield :column
++.left_column_part= yield :leftcolumn
+diff --git a/app/views/projects/_column.haml b/app/views/projects/_column.haml
+new file mode 100644
+index 0000000..21d0425
+--- /dev/null
++++ b/app/views/projects/_column.haml
+@@ -0,0 +1,6 @@
++- content_for :column do
++  = render 'projects/pages', :project => project, :pages => project.pages
++  = render 'projects/uploads', :project => project, :uploads => project.uploads
++  = render 'projects/task_lists', :project => project, :task_lists => project.task_lists
++  = render 'projects/recent_conversations', :project => project, :recent_conversations => project.conversations.not_simple.recent(4)
++  = render 'projects/people_list', :project => project, :compact => false
+diff --git a/app/views/projects/_pages.haml b/app/views/projects/_pages.haml
+index ab37535..ab7b5ad 100644
+--- a/app/views/projects/_pages.haml
++++ b/app/views/projects/_pages.haml
+@@ -2,4 +2,5 @@
+   %h2= t('.title')
+   - for page in pages
+     = link_to h(page), project_page_path(project,page), :class => 'page'
++  = link_to t('.view_all'), project_pages_path(project), :class => 'view_all'
+   = link_to t('.new'), new_project_page_path(project), :class => 'new'
+diff --git a/app/views/projects/_task_lists.haml b/app/views/projects/_task_lists.haml
+new file mode 100644
+index 0000000..6ee9b7e
+--- /dev/null
++++ b/app/views/projects/_task_lists.haml
+@@ -0,0 +1,8 @@
++.project_task_lists
++  %h2= 'Task Lists'
++  - for task_list in task_lists
++    = link_to h(task_list), project_task_list_path(project,task_list), :class => 'task_list'
++  - if task_lists.size > 0
++    = link_to t('.view_all'), project_task_lists_path(project), :class => 'view_all'
++  - if project.organization.is_admin?(current_user)
++    = link_to t('.new'), new_project_task_list_path(project), :class => 'new'
+diff --git a/app/views/projects/_uploads.haml b/app/views/projects/_uploads.haml
+new file mode 100644
+index 0000000..e43006c
+--- /dev/null
++++ b/app/views/projects/_uploads.haml
+@@ -0,0 +1,8 @@
++.project_files
++  %h2= 'Uploads'
++  - for upload in uploads
++    = link_to h(upload), project_upload_path(project,upload), :class => 'files'
++  - if uploads.size > 0
++    = link_to t('.view_all'), project_uploads_path(project), :class => 'view_all'
++  - if project.organization.is_admin?(current_user)
++    = link_to t('.new'), new_project_upload_path(project), :class => 'new'
+diff --git a/app/views/projects/index.haml b/app/views/projects/index.haml
+index e8fef7a..78de6b5 100644
+--- a/app/views/projects/index.haml
++++ b/app/views/projects/index.haml
+@@ -26,5 +26,3 @@
+   .more_links
+     .el= link_to t('shared.instructions.subscribe_to_feeds'), feeds_path, :class => 'feeds'
+     .el= link_to t('shared.instructions.subscribe_to_calendars'), calendars_path, :class => 'calendar'
+-    .el= link_to t('shared.collapsed_mode'), "#", :class => 'collapsed_mode'
+-    .el{ :style => 'display: none' }= link_to t('shared.expanded_mode'), "#", :class => 'expanded_mode'
+diff --git a/app/views/projects/list.haml b/app/views/projects/list.haml
+index 974e668..f260c57 100644
+--- a/app/views/projects/list.haml
++++ b/app/views/projects/list.haml
+@@ -1,3 +1,12 @@
++.text_actions
++  - if !Teambox.config.community || (Teambox.config.community && !@community_organization) || (@community_organization && @community_role)
++    = new_project_link
++    .clear
++  - else
++    %p= t('.cant_create')
++
++%h2= "Project List"
++
+ - @organizations.each do |organization|
+ 
+   - next unless organization[:active_projects].any? or organization[:archived_projects].any?
+@@ -26,3 +35,6 @@
+           = link_to "#{t('.archived')}: #{h(project)}", project
+           %span.status
+             = t('.archived_at', :date => project.updated_at.to_date)
++- content_for :column do
++  = instructions_for_feeds
++  = instructions_for_calendars
+diff --git a/app/views/projects/show.haml b/app/views/projects/show.haml
+index ee869f1..34f5353 100644
+--- a/app/views/projects/show.haml
++++ b/app/views/projects/show.haml
+@@ -13,22 +13,13 @@
+       = render 'comments/fields', :f => fields,
+         :placeholder => t('comments.new.project'), :project => @current_project
+   
++.text_actions
++  .el= link_to t('shared.collapsed_mode'), "#", :class => 'collapsed_mode'
++  .el{ :style => 'display: none' }= link_to t('shared.expanded_mode'), "#", :class => 'expanded_mode'
++.clear
++
+ #activities
+   = list_threads(@threads)
+   = show_more_button
+ 
+ =# javascript_tag autorefresh(@activities, @current_project)
+-
+-- content_for :column do
+-  = render 'recent_conversations', :project => @current_project, :recent_conversations => @recent_conversations
+-  = render 'pages', :project => @current_project, :pages => @current_project.pages
+-
+-  = render 'people_list', :project => @current_project, :compact => false
+-  - if @current_project.users.size > 1
+-    .tip= t('.tip')
+-
+-  = instructions_for_feeds
+-  = instructions_for_calendars
+-  = instructions_for_email(@current_project)
+-  = link_to t('.public_project'), public_project_path(@current_project), :class => :public_link if @current_project.public
+-  = leave_project_link(@current_project) if @current_project.has_member?(@current_user)
+diff --git a/app/views/shared/_navigation.html.haml b/app/views/shared/_navigation.html.haml
+index 2c21d76..c4ede6f 100644
+--- a/app/views/shared/_navigation.html.haml
++++ b/app/views/shared/_navigation.html.haml
+@@ -4,38 +4,11 @@
+   .el= link_to t('.recent_activity'), root_path, :class => 'recent_activity'
+ 
+   -# All Projects
+-  - show_only_recent = current_user.people.size > 3
+   - active_projects = current_user.projects.select{|p| !p.archived} #we select them in ruby because the query is done in the header already
+-  - projects_to_show = show_only_recent ? current_user.recent_projects : active_projects
+-  - projects_archived = current_user.people.size - projects_to_show.size
+ 
+   .el#my_projects
+-    = link_to t('.all_projects'), projects_path, :class => 'home'
++    = link_to t('.all_projects'), all_projects_path, :class => 'home'
+     %span= active_projects.size
+-  .contained
+-    - for project in projects_to_show
+-      - next if project.new_record?
+-      .el= link_to project, project, :class => 'project'
+-      .contained
+-        .el= link_to t('.recent_activity'), project_path(project), :class => 'recent_activity ajax'
+-        .el= link_to t('.conversations'), project_conversations_path(project), :class => 'conversations ajax'
+-        .el= link_to t('.tasks'), project_task_lists_path(project), :class => 'tasks'
+-        - if time_tracking_enabled? and project.tracks_time
+-          .el= link_to t('.time'), project_time_path(project), :class => 'time ajax'
+-        .el= link_to t('.pages'), project_pages_path(project), :class => 'pages ajax'
+-        .el= link_to t('.files'), project_uploads_path(project), :class => 'files ajax'
+-        - if can?(:update, project)
+-          .el= link_to t('.settings'), project_settings_path(project), :class => 'settings'
+-          .contained
+-            .el= link_to t('shared.project_settings_navigation.general'), project_settings_path(project.permalink), :class => 'general_settings ajax'
+-            .el= link_to t('shared.project_settings_navigation.deletion'), project_deletion_path(project.permalink, :sub_action => 'deletion'), :class => 'deletion ajax'
+-            - if project.owner?(current_user)
+-              .el= link_to t('shared.project_settings_navigation.ownership'), project_ownership_path(project.permalink, :sub_action => 'ownership'), :class => 'ownership ajax'
+-        .el= link_to t('.people'), project_people_path(project), :class => 'people ajax'
+-    - if projects_archived > 0
+-      .el= link_to t('.show_all_projects'), all_projects_path, :class => 'more ajax'
+-    - if current_user.can_create_project? && (!Teambox.config.community || (Teambox.config.community && !@community_organization) || (@community_organization && @community_role))
+-      .el= link_to t('.new_project'), new_project_path, :class => 'more ajax'
+ 
+   -# My Tasks
+   - pending_tasks = current_user.pending_tasks
+@@ -57,15 +30,14 @@
+       - next if organization.new_record?
+       .el= link_to organization, organization_path(organization)
+       .contained
+-        .el= link_to t('organizations.column.general_settings'), edit_organization_path(organization), :class => 'ajax'
+-        .el= link_to t('organizations.column.admin_projects'), projects_organization_path(organization), :class => 'ajax'
++        .el= link_to t('organizations.column.general_settings'), edit_organization_path(organization), :class => ''
++        .el= link_to t('organizations.column.admin_projects'), projects_organization_path(organization), :class => ''
+         - if can?(:admin, organization)
+-          .el= link_to t('organizations.column.admin_users'), organization_memberships_path(organization), :class => 'ajax'
++          .el= link_to t('organizations.column.admin_users'), organization_memberships_path(organization), :class => ''
+           .el= link_to t('organizations.column.appearance'), appearance_organization_path(organization), :class => ''
+-          .el= link_to t('organizations.column.delete'), delete_organization_path(organization), :class => 'ajax'
++          .el= link_to t('organizations.column.delete'), delete_organization_path(organization), :class => ''
+     - unless Teambox.config.community
+-      .el= link_to t('.show_all_organizations'), organizations_path, :class => 'more ajax'
++      .el= link_to t('.show_all_organizations'), organizations_path, :class => 'more'
+ 
+-  -# More options
+-  .el#show_more= link_to t('.show_more'), "#", :class => 'show_more'
+-  .el.extra{ :style => 'display: none' }= link_to t('.time'), time_path, :class => 'ajax time'
++  .el= link_to t('.time'), time_path, :class => 'time'
++  .el= link_to "Public site", public_projects_path, :class => 'public'
+diff --git a/app/views/shared/_project_navigation.html.haml b/app/views/shared/_project_navigation.html.haml
+new file mode 100644
+index 0000000..3fd6307
+--- /dev/null
++++ b/app/views/shared/_project_navigation.html.haml
+@@ -0,0 +1,12 @@
++.nav_links
++  %h3= link_to @current_project, @current_project, :class => 'project'
++  - if can?(:update, @current_project)
++    .el= link_to t('shared.navigation.settings'), project_settings_path(@current_project.permalink), :class => 'settings'
++    .el= link_to t('shared.navigation.people'), project_people_path(@current_project.permalink), :class => 'people'
++  - if @current_project.owner?(@current_user)
++    .el= link_to t('shared.project_settings_navigation.ownership'), project_ownership_path(@current_project.permalink, :sub_action => 'ownership'), :class => 'ownership'
++    .el= link_to t('shared.project_settings_navigation.deletion'), project_deletion_path(@current_project.permalink, :sub_action => 'deletion'), :class => 'deletion'
++    .el= link_to t('projects.show.public_project'), public_project_path(project), :class => :public if project.public
++  .el= leave_project_link(@current_project)
++  = search_bar(@current_project)
++.clear
+diff --git a/app/views/shared/_search_bar.haml b/app/views/shared/_search_bar.haml
+index d1dec19..eac68d6 100644
+--- a/app/views/shared/_search_bar.haml
++++ b/app/views/shared/_search_bar.haml
+@@ -1,6 +1,6 @@
+ - if current_user.can_search? or (@current_project && @current_project.user.can_search?)
+   .search_bar
+-    - per_project = !current_user.can_search?
++    - per_project = project
+     - search_destination = per_project ? project_search_path(@current_project) : search_path
+     = form_tag search_destination, :method => 'get', :class => 'search', :id => 'search' do
+       = text_field_tag :q, nil, :type => 'search', :id => nil,
+diff --git a/app/views/task_lists/_column.haml b/app/views/task_lists/_column.haml
+index d8b92c6..46a656c 100644
+--- a/app/views/task_lists/_column.haml
++++ b/app/views/task_lists/_column.haml
+@@ -10,7 +10,8 @@
+   - when 'index_task_lists'
+ 
+ %h2= t('.other_views')
+-= gantt_view_link(@current_project)
+-= instructions_for_calendars
++= gantt_view_link(project)
++= subscribe_to_task_calendar_link(project)
++= subscribe_to_my_task_calendar_link(project)
+ = print_task_lists_link(project)
+ = instructions_for_email(project)
+diff --git a/app/views/users/calendars.haml b/app/views/users/calendars.haml
+index eae61c5..0ed2afd 100644
+--- a/app/views/users/calendars.haml
++++ b/app/views/users/calendars.haml
+@@ -8,10 +8,10 @@
+ 
+ %h3= t('.your_calendars')
+ 
+-= subscribe_to_all_calendars_link
++%div.calendar_links_all= subscribe_to_all_calendars_link
+ 
+ - for project in current_user.projects.unarchived
+-  = subscribe_to_calendar_link(project)
++  %div.calendar_links= subscribe_to_calendar_link(project)
+ 
+ - content_for :column do
+   %h2= t('.clients.title')
+-- 
+1.8.1.2
+

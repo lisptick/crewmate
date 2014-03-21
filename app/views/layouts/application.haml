@@ -28,13 +28,20 @@
     #container.container
       .wrapper
         - show_flash
+        .left_column_wrap
+          .column#column
+            = render 'shared/navigation'
         .content_wrap
           .content#content= yield
         .column_wrap
           .column#column
-            = render 'shared/navigation'
+            -if @current_project
+              = render '/shared/project_navigation', :project => @current_project, :current_user => @current_user, :recent_conversations => @recent_conversations
             .view_sidebar
+              - if @current_project
+                = render 'projects/column', :project => @current_project, :current_user => @current_user, :recent_conversations => @recent_conversations
               = yield :column
+
       = footer
     = autocomplete_projects_people_data
     = projects_people_data

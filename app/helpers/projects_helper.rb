@@ -89,28 +89,32 @@ module ProjectsHelper
   end
 
   def subscribe_to_all_calendars_link
-    content_tag(:div,
       (t('.subscribe_to_all') +
       link_to(t('shared.task_navigation.all_tasks'), user_rss_token(projects_path(:format => :ics))) +
       ' ' + t('common.or') + ' ' +
-      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(projects_path(:format => :ics), 'mine'))).html_safe,
-      :class => 'calendar_links_all')
+      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(projects_path(:format => :ics), 'mine'))).html_safe
   end
 
   def subscribe_to_calendar_link(project)
-    content_tag(:div,
       (t('.subscribe_to_project', :project => h(project)) +
       link_to(t('shared.task_navigation.all_tasks'), user_rss_token(project_path(project, :format => :ics))) +
       ' ' + t('common.or') + ' ' +
-      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(project_path(project, :format => :ics), 'mine'))).html_safe,
-      :class => :calendar_links)
+      link_to(t('shared.task_navigation.my_assigned_tasks'), user_rss_token(project_path(project, :format => :ics), 'mine'))).html_safe
+  end
+
+  def subscribe_to_task_calendar_link(project)
+    link_to(t('shared.task_navigation.all_tasks'),  user_rss_token(project_path(project, :format => :ics)), :class => :calendars_link, :style => 'display:block').html_safe
+  end
+
+  def subscribe_to_my_task_calendar_link(project)
+    link_to(t('shared.task_navigation.my_assigned__tasks'),  user_rss_token(project_path(project, :format => :ics)), :class => :calendars_link, :style => 'display:block').html_safe
   end
 
   def leave_project_link(project)
     unless project.user == current_user
       link_to t('people.column.leave_project'),
         project_person_path(project, current_user.people.detect { |p| p.project_id == project.id }),
-        :method => :delete, :confirm => t('people.column.confirm_delete'), :class => :leave_link
+        :method => :delete, :confirm => t('people.column.confirm_delete'), :class => :leave
     end
   end
 

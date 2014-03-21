@@ -1,3 +1,6 @@
 - content_for :column do
   .conversations
+    %h2
+      = t('shared.project_navigation.all_conversations')
+
     = render conversations, :project => project, :current_target => conversation

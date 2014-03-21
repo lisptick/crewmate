@@ -18,6 +18,12 @@ module PagesHelper
     end
   end
 
+  def new_project_link()
+    if can? :make_projects
+      link_to content_tag(:span,t('.new_project')), new_project_path, :class => 'add_button'
+    end
+  end
+
   def page_fields(f)
     render 'pages/fields', :f => f
   end

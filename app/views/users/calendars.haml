@@ -8,10 +8,10 @@
 
 %h3= t('.your_calendars')
 
-= subscribe_to_all_calendars_link
+%div.calendar_links_all= subscribe_to_all_calendars_link
 
 - for project in current_user.projects.unarchived
-  = subscribe_to_calendar_link(project)
+  %div.calendar_links= subscribe_to_calendar_link(project)
 
 - content_for :column do
   %h2= t('.clients.title')
