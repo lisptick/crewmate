@@ -11,5 +11,10 @@ class Public::TaskListsController < Public::PublicController
 
   def show
     @public_task_list = @project.task_lists.find(params[:id])
+
+    respond_to do |f|
+      f.html
+      f.rss { render layout: false }
+    end
   end
 end
