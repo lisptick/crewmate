@@ -81,10 +81,10 @@ class Person < ActiveRecord::Base
     project_ids = Array.wrap(projects).map(&:id)
     current_user_id = current_user.try(:id).to_i
 
-    select("people.project_id, people.user_id, users.login, users.first_name, users.last_name, people.id, users.id")
-      .joins(:project).joins(:user)
+    joins(:project).joins(:user)
       .where("people.project_id IN (?) AND (people.deleted IS NULL OR people.deleted = ?)", project_ids, false)
-      .order("users.id = #{current_user_id} DESC, users.login")
+      .order("users.id = #{current_user_id} DESC, users.login").map { |row| [row.project_id, row.user.login, row.user.first_name, row.user.last_name, row.id, row.user.id] }
+
   end
 
   def user
