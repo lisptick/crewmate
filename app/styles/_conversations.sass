@@ -114,6 +114,34 @@ body.new_conversations, body.create_conversations
     .preview
       margin: 4px 8px 4px 0
 
+.bubble
+  font-size: 15px
+  padding: 10px 19px
+  margin-top: 7px
+  background: none repeat scroll 0% 0% #FFF
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2)
+  border-radius: 4px
+  position: relative
+  margin-left: 45px
+  width: 83%
+  &:before
+    content: '\f503'
+    text-shadow: -2px 0px 3px rgba(0, 0, 0, 0.1)
+    color: white
+    display: inline-block
+    width: 24px
+    height: 16px
+    position: absolute
+    left: -22px
+    top: 3px
+    -webkit-font-smoothing: antialiased
+    font-size: 23px
+    line-height: 1
+    font-family: 'Genericons'
+    text-decoration: inherit
+    font-weight: normal
+    font-style: normal
+    vertical-align: top
 .show_conversations
   #comments
     font-size: 12px
