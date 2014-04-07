@@ -1,5 +1,10 @@
 //= require <prototype>
-//= require <rails>
+//= require <jquery>
+//= require <jquerynoconflict>
+//= require <jquery_ujs>
+//= require <jquery.fn.gantt>
+//= require <fullcalendar>
+//= require <prettify>
 //= require <html5>
 //= require <builder>
 //= require <effects>

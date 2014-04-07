@@ -18,3 +18,7 @@ stylesheets:
     - public/stylesheets/sessions.css
     - public/stylesheets/public.css
     - public/stylesheets/sites.css
+  jQuery_widgets:
+    - public/stylesheets/jQuery.Gantt/style.css
+    - public/stylesheets/jQuery.Gantt/prettify.css
+    - public/stylesheets/fullcalendar.css

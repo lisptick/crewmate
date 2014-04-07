@@ -329,4 +329,42 @@ module TaskListsHelper
     @current_gantt_view = session[:gantt_view]
   end
 
+  def load_jquery_gantt
+    task_lists = @task_lists
+    .reject{ |list| !list.finish_on? || list.finish_on < DateTime.now}
+    .map { |list| {
+      :name => list.name,
+      :desc => '',
+      :values => [{
+        :from => list.start_on ? list.start_on : Time.now,
+        :to => list.finish_on,
+        :dataObj => {
+          :url => project_task_list_path(list.project, list)
+        },
+        :label => list.name
+        }],
+      }
+    }
+
+    javascript_tag <<-EOS
+      _task_lists = #{task_lists.to_json}
+      jQuery( document ).ready(function( $ ) {
+        "use strict";
+        $(".jquery_gantt").gantt({
+          source: _task_lists,
+          navigate: "scroll",
+          maxScale: "months",
+          minScale: "days",
+          itemsPerPage: 10,
+          onItemClick: function(data) {
+            console.log(data);
+            //alert(data.task_list.url);
+            window.open(data.task_list.url);
+          },
+        });
+
+        prettyPrint();
+      });
+    EOS
+  end
 end

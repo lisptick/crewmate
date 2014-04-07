@@ -1,0 +1,324 @@
+.jquery_gantt, .jquery_gantt2
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif
+  font-size: 12px
+  width: 100%
+  margin: 20px auto
+  position: relative
+
+.gantt:after
+  content: "."
+  visibility: hidden
+  display: block
+  height: 0
+  clear: both
+
+.fn-gantt
+  width: 100%
+  .fn-content
+    position: relative
+    width: 100%
+  .leftPanel
+    float: left
+    width: 225px
+    overflow: hidden
+    border-right: 1px solid #DDD
+    position: relative
+    z-index: 20
+  .row
+    float: left
+    height: 24px
+    line-height: 24px
+    margin-left: -1px
+  .leftPanel
+    .fn-label
+      display: inline-block
+      margin: 0 0 0 5px
+      color: #484A4D
+      width: 110px
+      white-space: nowrap
+      text-overflow: ellipsis
+      overflow: hidden
+    .row0
+      border-top: 1px solid #DDD
+    .name, .desc
+      float: left
+      height: 23px
+      margin: 0
+      border-bottom: 1px solid #DDD
+      background-color: #f6f6f6
+    .name
+      width: 110px
+      font-weight: bold
+    .desc
+      width: 115px
+    .fn-wide
+      width: 225px
+      .fn-label
+        width: 225px
+  .spacer
+    margin: -2px 0 1px 0
+    border-bottom: none
+    background-color: #f6f6f6
+  .rightPanel
+    overflow: hidden
+  .dataPanel
+    margin-left: 0px
+    border-right: 1px solid #DDD
+    background-image: url(../img/grid.png)
+    background-repeat: repeat
+    background-position: 24px 24px
+    position: relative
+  .day, .date
+    overflow: visible
+    width: 24px
+    line-height: 24px
+    text-align: center
+    border-left: 1px solid #DDD
+    border-bottom: 1px solid #DDD
+    margin: -1px 0 0 -1px
+    font-size: 11px
+    color: #484a4d
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75)
+    text-align: center
+  .holiday
+    background-color: #ffd263
+    height: 23px
+    margin: 0 0 -1px -1px
+  .today
+    background-color: #fff8da
+    height: 23px
+    margin: 0 0 -1px -1px
+    font-weight: bold
+    text-align: center
+  .sa, .sn, .wd
+    height: 23px
+    margin: 0 0 0 -1px
+    text-align: center
+  .sa, .sn
+    color: #939496
+    background-color: #f5f5f5
+    text-align: center
+  .wd
+    background-color: #f6f6f6
+    text-align: center
+  .rightPanel
+    .month, .year
+      float: left
+      overflow: hidden
+      border-left: 1px solid #DDD
+      border-bottom: 1px solid #DDD
+      height: 23px
+      margin: 0 0 0 -1px
+      background-color: #f6f6f6
+      font-weight: bold
+      font-size: 11px
+      color: #484a4d
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75)
+      text-align: center
+
+/* === LEFT PANEL ===
+
+/* === RIGHT PANEL ===
+
+.fn-gantt-hint
+  border: 5px solid #edc332
+  background-color: #fff5d4
+  padding: 10px
+  position: absolute
+  display: none
+  z-index: 11
+  -webkit-border-radius: 4px
+  -moz-border-radius: 4px
+  border-radius: 4px
+
+.fn-gantt
+  .bar
+    background-color: #D0E4FD
+    height: 18px
+    margin: 0px 3px 3px 0px
+    position: absolute
+    z-index: 10
+    text-align: center
+    -webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.25) inset
+    -moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.25) inset
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.25) inset
+    -webkit-border-radius: 3px
+    -moz-border-radius: 3px
+    border-radius: 3px
+    .fn-label
+      line-height: 18px
+      font-weight: bold
+      white-space: nowrap
+      width: 100%
+      text-overflow: ellipsis
+      overflow: hidden
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4)
+      color: #414B57 !important
+      text-align: center
+      font-size: 11px
+  .ganttRed
+    background-color: #F9C4E1
+    .fn-label
+      color: #78436D !important
+  .ganttGreen
+    background-color: #D8EDA3
+    .fn-label
+      color: #778461 !important
+  .ganttOrange
+    background-color: #FCD29A
+    .fn-label
+      color: #714715 !important
+  .bottom
+    clear: both
+    background-color: #f6f6f6
+    width: 100%
+  .navigate
+    border-top: 1px solid #DDD
+    padding: 10px 0 10px 225px
+    .nav-slider
+      height: 20px
+      display: inline-block
+    .nav-slider-left, .nav-slider-right
+      text-align: center
+      height: 20px
+      display: inline-block
+    .nav-slider-left
+      float: left
+    .nav-slider-right
+      float: right
+    .nav-slider-content
+      text-align: left
+      width: 160px
+      height: 20px
+      display: inline-block
+      margin: 0 10px
+    .nav-slider-bar, .nav-slider-button
+      position: absolute
+      display: block
+    .nav-slider-bar
+      width: 155px
+      height: 6px
+      background-color: #838688
+      margin: 8px 0 0 0
+      -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset
+      -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6) inset
+      -webkit-border-radius: 3px
+      -moz-border-radius: 3px
+      border-radius: 3px
+    .nav-slider-button
+      width: 17px
+      height: 60px
+      background: url(../img/slider_handle.png) center center no-repeat
+      left: 0px
+      top: 0px
+      margin: -26px 0 0 0
+      cursor: pointer
+    .page-number
+      display: inline-block
+      font-size: 10px
+      height: 20px
+      span
+        color: #666666
+        margin: 0 6px
+        height: 20px
+        line-height: 20px
+        display: inline-block
+    a
+      &:link, &:visited, &:active
+        text-decoration: none
+  .nav-link
+    margin: 0 3px 0 0
+    display: inline-block
+    width: 20px
+    height: 20px
+    font-size: 0px
+    background: #595959 url(../img/icon_sprite.png) !important
+    border: 1px solid #454546
+    cursor: pointer
+    vertical-align: top
+    -webkit-border-radius: 2px
+    -moz-border-radius: 2px
+    border-radius: 2px
+    -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 1px 1px rgba(0, 0, 0, 0.2)
+    -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 1px 1px rgba(0, 0, 0, 0.2)
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 1px 1px rgba(0, 0, 0, 0.2)
+    -webkit-box-sizing: border-box
+    -moz-box-sizing: border-box
+    box-sizing: border-box
+    &:active
+      -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25) inset, 0 1px 0 white
+      -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25) inset, 0 1px 0 white
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25) inset, 0 1px 0 white
+  .navigate
+    .nav-page-back
+      background-position: 1px 0 !important
+      margin: 0
+    .nav-page-next
+      background-position: 1px -16px !important
+      margin-right: 15px
+    .nav-slider .nav-page-next
+      margin-right: 5px
+    .nav-begin
+      background-position: 1px -112px !important
+    .nav-prev-week
+      background-position: 1px -128px !important
+    .nav-prev-day
+      background-position: 1px -48px !important
+    .nav-next-day
+      background-position: 1px -64px !important
+    .nav-next-week
+      background-position: 1px -160px !important
+    .nav-end
+      background-position: 1px -144px !important
+    .nav-zoomOut
+      background-position: 1px -96px !important
+    .nav-zoomIn
+      background-position: 1px -80px !important
+      margin-left: 15px
+    .nav-now
+      background-position: 1px -32px !important
+    .nav-slider .nav-now
+      margin-right: 5px
+
+/* === BOTTOM NAVIGATION ===
+
+.fn-gantt-loader
+  position: absolute
+  width: 100%
+  height: 100%
+  left: 0
+  top: 0
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bf000000', endColorstr='#bf000000',GradientType=0 )
+  background: rgba(0, 0, 0, 0.75)
+  cursor: wait
+  z-index: 30
+
+.fn-gantt-loader-spinner span
+  position: absolute
+  margin: auto
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  width: 100%
+  text-align: center
+  height: 1em
+  line-height: 1em
+  color: #fff
+  font-size: 1em
+  font-weight: bold
+
+.row:after
+  clear: both
+
+/* Bootstrap 3.0 re-reset
+
+.fn-gantt *
+  -webkit-box-sizing: content-box
+  -moz-box-sizing: content-box
+  box-sizing: content-box
+  &:after, &:before
+    -webkit-box-sizing: content-box
+    -moz-box-sizing: content-box
+    box-sizing: content-box

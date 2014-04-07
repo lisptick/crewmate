@@ -20,6 +20,7 @@ document.on('click', '#show_calendar_link', function(e,el){
     Banner.hide_banner_items();
     Banner.show_banner("upcoming_events_banner");
     Banner.activate_tab("tab_calendar");
+    jQuery('.jquery_calendar').fullCalendar('render');
 });
 
 document.on('click', '#show_gantt_chart_link', function(e,el){

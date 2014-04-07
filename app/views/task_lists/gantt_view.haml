@@ -9,5 +9,11 @@
     = calendar_banner_link
     = gantt_banner_link
   .body{ :style => 'border-left: 1px solid #c8c8c8; border-right: 1px solid #c8c8c8' }
-    = upcoming_events(@events)
-    = gantt_chart(@chart, 47)
+    - style = current_gantt_view?(:calendar)? '' : 'display: none'
+    #upcoming_events_banner.jquery_calendar.banner_item{:style => style}
+    = load_jquery_calendar(@events)
+    #gantt_banner.jquery_gantt.banner_item
+    = load_jquery_gantt
+
+- content_for :stylesheet_includes do
+  = include_stylesheets :jQuery_widgets, :media => :screen

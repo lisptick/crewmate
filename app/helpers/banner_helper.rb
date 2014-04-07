@@ -52,4 +52,36 @@ module BannerHelper
       :events => events,
       :chart => chart
   end
+
+  def load_jquery_calendar(events)
+    event_list = []
+    @events.each do |event|
+      next if event.nil?
+      event_list.concat(
+      event.map { |task|  {
+        :title => truncate(h(task.name), :length => 30),
+        :start   => task.due_on.strftime("%FT%TZ"),
+        :end   => task.due_on.strftime("%FT%TZ"),
+        :url   => project_task_path(task.project, task),
+        :class => "task_status_#{task.status_name}"
+
+      }})
+    end
+
+    javascript_tag <<-EOS
+      _events= #{event_list.to_json};
+      jQuery( document ).ready(function( $ ) {
+        "use strict";
+        $('.jquery_calendar').fullCalendar({
+          header: {
+            left: '',
+            center: 'title',
+            right: 'prev,next today'
+          },
+          editable: false,
+          events: _events,
+        })
+      });
+    EOS
+  end
 end
