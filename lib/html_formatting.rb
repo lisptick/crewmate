@@ -45,7 +45,7 @@ module HtmlFormatting
       all_mentioned = false
 
 
-      body.gsub(/(^|\W)@([\w\._]+)/) do |text|
+      body.gsub(/(^|\W)@([-\w\._]+)/) do |text|
         first = $1
         name = $2.downcase
 
